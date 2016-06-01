@@ -47,6 +47,9 @@ function renderPeoplePage() {
 				                                            "<label class=\"radio-inline\">" +
 				                                                "<input type=\"radio\" name=\"optionsGender\" id=\"optionsFemale\" value=\"F\">Female" +
 				                                            "</label>" +
+				                                        "<div class=\"form-group\">" +
+				                                        	"<label>Image URL:</label>" +
+				                                        	"<input id=\"imageUrl\" class=\"form-control\">" +
                                             			"</div>" +
                                             			 "<div class=\"form-group\">" +
 				                                        	"<label>Alternate Names: </label>" +
@@ -104,8 +107,11 @@ function renderPeoplePage() {
 
 function submitPerson() {
 	var person = new Object();
-	
-	person.name = $("#personName").val();
+
+	if( $("#personName").val() )
+		person.name = $("#personName").val().trim();
+	else
+		alert("Name cannnot be empty");
 	
 	if ($("#optionsMale").prop("checked")) 
 		person.gender = "M";
@@ -113,21 +119,37 @@ function submitPerson() {
 		person.gender = "F";
 
 	var alternateNamesText = $("#alternateNames").val();
-	if( alternateNamesText)
-		person.alternateNames = alternateNamesText.split(",");
+	if( alternateNamesText) {
+		var alternateNamesArray = alternateNamesText.split(",");
+		for(var ani = 0; ani < alternateNamesArray.length; ani++ ) {
+			alternateNamesArray[ani] = alternateNamesArray[ani].trim();
+		}
+		person.alternateNames = alternateNamesArray;
+	}
+		
+
+	var imageUrl = $("#imageUrl").val();
+	if( imageUrl)
+		person.imageUrl = imageUrl.trim();
 
 	var attributes = [];
 
 	if($("#actorCheckbox").prop("checked")) {
 		var attrib = new Object();
 		attrib.id = "A101";
-		attrib.value = "నటుడు";
+		if( person.gender == "M" )
+			attrib.value = "నటుడు";
+		else
+			attrib.value = "నటి";
 		attributes.push(attrib);
 	}
 	if($("#directorCheckbox").prop("checked")) {
 		var attrib = new Object();
 		attrib.id = "A100";
-		attrib.value = "దర్శకుడు";
+		if( person.gender == "M" )
+			attrib.value = "దర్శకుడు";
+		else
+			attrib.value = "దర్శకురాలు";
 		attributes.push(attrib);
 	}	
 	if($("#producerCheckbox").prop("checked")) {
@@ -139,26 +161,39 @@ function submitPerson() {
 	if($("#writerCheckbox").prop("checked")) {
 		var attrib = new Object();
 		attrib.id = "A104";
-		attrib.value = "రచయిత";
+		if( person.gender == "M" )
+			attrib.value = "రచయిత";
+		else
+			attrib.value = "రచయిత్రి";
 		attributes.push(attrib);
 	}
 	if($("#composerCheckbox").prop("checked")) {
 		var attrib = new Object();
 		attrib.id = "A102";
-		attrib.value = "సంగీత దర్శకుడు";
+		if( person.gender == "M" )
+			attrib.value = "సంగీత దర్శకుడు";
+		else
+			attrib.value = "సంగీత దర్శకురాలు";
 		attributes.push(attrib);
 	}
 	if($("#singerCheckbox").prop("checked")) {
 		var attrib = new Object();
 		attrib.id = "A103";
-		attrib.value = "గాయకులు";
+		if( person.gender == "M" )
+			attrib.value = "గాయకుడు";
+		else
+			attrib.value = "గాయని";
 		attributes.push(attrib);
 	}	
 	person.occupations = attributes;
-	person.birthDate = $("#birthDate").val();
-	person.birthPlace = $("#birthPlace").val();
-	person.deathDate = $("#deathDate").val();
-	person.deathPlace = $("#deathPlace").val();
+	if( $("#birthDate").val() )
+		person.birthDate = $("#birthDate").val().trim();
+	if( $("#birthPlace").val() )
+	person.birthPlace = $("#birthPlace").val().trim();
+	if( $("#deathDate").val() )
+		person.deathDate = $("#deathDate").val().trim();
+	if( $("#deathPlace").val() )
+		person.deathPlace = $("#deathPlace").val().trim();
 
 	$.ajax({
         type : "POST",
@@ -181,4 +216,11 @@ function clearPersonForm() {
 	$("#birthPlace").val("");
 	$("#deathDate").val("");
 	$("#deathPlace").val("");
+
+	$('#actorCheckbox').attr('checked', false);
+	$('#directorCheckbox').attr('checked', false);
+	$('#producerCheckbox').attr('checked', false);
+	$('#writerCheckbox').attr('checked', false);
+	$('#composerCheckbox').attr('checked', false);
+	$('#singerCheckbox').attr('checked', false);
 }
