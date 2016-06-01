@@ -216,6 +216,7 @@ function clearPersonForm() {
 	$("#birthPlace").val("");
 	$("#deathDate").val("");
 	$("#deathPlace").val("");
+	$("#imageUrl").val("");
 
 	$('#actorCheckbox').attr('checked', false);
 	$('#directorCheckbox').attr('checked', false);
