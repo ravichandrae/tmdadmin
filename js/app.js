@@ -235,6 +235,7 @@ function performSearch() {
     })
     .done(function(data){
     	cachedResults = data;
+    	$("#personId").val("0");
         renderSearchResults(data);
     })
     .fail(function(data){
