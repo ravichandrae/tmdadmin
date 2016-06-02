@@ -210,6 +210,7 @@ function submitPerson() {
 }
 
 function clearPersonForm() {
+	$("#personId").val("0");
 	$("#personName").val("");
 	$("#alternateNames").val("");
 	$("#birthDate").val("");
